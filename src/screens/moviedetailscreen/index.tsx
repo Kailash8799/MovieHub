@@ -45,10 +45,10 @@ const MovieDetailsScreen = ({ route, navigation }: { route: any, navigation: any
                 <View style={styles.statusbarheight} />
                 <Animated.View style={[styles.header]} >
                     <TouchableOpacity
-                    onPress={() => {
-                        navigation.goBack();
-                    }}
-                    style={styles.backbuton} >
+                        onPress={() => {
+                            navigation.goBack();
+                        }}
+                        style={styles.backbuton} >
                         <Icon name="angle-left" size={30} color={'#fff'} />
                         <Text style={styles.backtext} >Back</Text>
                     </TouchableOpacity>
@@ -80,7 +80,9 @@ const MovieDetailsScreen = ({ route, navigation }: { route: any, navigation: any
                         </View>
                     </View>
                     <View style={styles.bottombox} >
-                        <TouchableOpacity activeOpacity={0.6} style={[styles.button, styles.playbutton]} >
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('playmovie', { movieuri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4' });
+                        }} activeOpacity={0.6} style={[styles.button, styles.playbutton]} >
                             <Play name="controller-play" color={'#fff'} size={20} />
                             <Text style={styles.text} >Play</Text>
                         </TouchableOpacity>

@@ -1,9 +1,11 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-const MovieCard = ({ navigation, image, index }: { navigation: any, image: any, index: number }) => {
+const { width } = Dimensions.get('screen');
+
+const MovieCategoryCard = ({ navigation, image, index }: { navigation: any, image: any, index: number }) => {
     const onClick = () => {
         navigation.navigate('moviedetails', { image, index });
     };
@@ -14,15 +16,17 @@ const MovieCard = ({ navigation, image, index }: { navigation: any, image: any, 
     );
 };
 
-export default MovieCard;
+export default MovieCategoryCard;
 
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 5,
+        marginVertical: 5,
     },
     image: {
         flex: 1,
-        width: 140,
+        width: width / 2.3,
+        height: 200,
         zIndex: 1,
         borderRadius: 10,
     },

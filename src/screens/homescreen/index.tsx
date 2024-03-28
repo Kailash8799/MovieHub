@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const HomeScreen = () => {
   const theme = useColorScheme();
   return (
-    <Tab.Navigator initialRouteName="home" backBehavior="history" screenOptions={{ tabBarLabel: '', tabBarStyle: { height: 65, paddingTop: 7, backgroundColor: theme === 'dark' ? darkThemeColor.secondary : lightThemeColor.quinary }, headerShown: false }} >
+    <Tab.Navigator initialRouteName="home" backBehavior="history" screenOptions={{ tabBarLabel: '', tabBarStyle: { height: 65, paddingTop: 7, backgroundColor: theme === 'dark' ? darkThemeColor.secondary : lightThemeColor.quinary }, headerShown: false, tabBarHideOnKeyboard: true }} >
       <Tab.Screen name="home" options={{
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => {
