@@ -27,7 +27,7 @@ const AppNavigator = () => {
       />
       <Stack.Navigator
         initialRouteName="initialscreen"
-        screenOptions={{ headerShown: false, gestureEnabled: true }} >
+        screenOptions={{ headerShown: false, gestureEnabled: true,animation:'ios' }} >
         <Stack.Screen name="initialscreen" component={InitialScreen} />
         <Stack.Screen name="onboardingscreen" component={Onboardingscreen} />
         <Stack.Screen name="homescreen" options={{ animation: 'default' }} component={HomeScreen} />

@@ -26,7 +26,7 @@
 
 
 //                 // onBuffer={this.onBuffer}                // Callback when remote video is buffering
-//                 // onError={this.videoError}   
+//                 // onError={this.videoError}
 //                 // Callback when video cannot be loaded
 //                 style={styles.backgroundVideo} />
 //         </View>
@@ -71,23 +71,23 @@ const PlayMovie = ({ route }: { route: any }) => {
     }, []);
 
     const onBuffer = (data: OnBufferData) => {
-        console.log(data)
+        console.log(data);
         setvideoloading(data.isBuffering);
     };
 
     const onLoad = () => {
-        console.log("OnLoad")
+        console.log('OnLoad');
         setvideoloading(false);
     };
 
     const onLoadStart = () => {
-        console.log("onLoadStart")
+        console.log('onLoadStart');
         setvideoloading(true);
     };
-    
+
     const onSeek = () => {
         setSeeking(true);
-        console.log("Seek started")
+        console.log('Seek started');
     };
 
     return (
@@ -95,29 +95,29 @@ const PlayMovie = ({ route }: { route: any }) => {
             <StatusBar backgroundColor={'transparent'} />
             <Video
                 source={{ uri: movieuri }}
-                resizeMode='contain'
+                resizeMode="contain"
                 ref={videoRef}
                 controls
                 onLoad={onLoad}
                 onVideoLoadStart={()=>{
-                    console.log("ssss")
+                    console.log('ssss');
                 }}
                 onLoadStart={onLoadStart}
                 onBuffer={onBuffer}
                 onSeek={onSeek}
                 onPlaybackResume={() => {
-                    console.log("onPlaybackResume")
+                    console.log('onPlaybackResume');
                     setvideoloading(false);
                     setSeeking(false);
                 }}
                 onVideoBuffer={()=>{
-                    console.log("bgg")
+                    console.log('bgg');
                 }}
                 onVideoLoad={()=>{
-                    console.log("Loading xxx")
+                    console.log('Loading xxx');
                 }}
                 onVideoSeek={()=>{
-                    console.log("Bsddf")
+                    console.log('Bsddf');
                 }}
 
                 style={styles.backgroundVideo}
