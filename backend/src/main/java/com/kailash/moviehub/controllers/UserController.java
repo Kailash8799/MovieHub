@@ -1,8 +1,13 @@
 package com.kailash.moviehub.controllers;
 
+import com.kailash.moviehub.model.Dto.UserDTO;
 import com.kailash.moviehub.model.Dto.UserLoginRequestDTO;
+import com.kailash.moviehub.model.Dto.UserSignUpRequestDTO;
 import com.kailash.moviehub.service.UserService;
 import com.kailash.moviehub.utils.ApiResponse;
+import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,9 +30,9 @@ public class UserController {
 
   @PostMapping("/signin")
   public ResponseEntity<ApiResponse<Object>> signIn(
-    @RequestBody UserLoginRequestDTO user
+    @Valid @RequestBody UserLoginRequestDTO userLoginRequestDTO
   ) {
-    String result = this.userService.signIn();
+    UserDTO result = this.userService.signIn(userLoginRequestDTO);
     if (result == null) {
       ApiResponse<Object> response = new ApiResponse<Object>(
         400,
@@ -48,23 +53,43 @@ public class UserController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<ApiResponse<Object>> signUp() {
+  public ResponseEntity<ApiResponse<Object>> signUp(
+    @Valid @RequestBody UserSignUpRequestDTO userSignUpRequestDTO
+  ) {
+    boolean result = this.userService.signUp(userSignUpRequestDTO);
+    if (!result) {
+      ApiResponse<Object> response = new ApiResponse<Object>(
+        400,
+        "Failed to create user. Please try again.",
+        false,
+        null
+      );
+      return ResponseEntity.badRequest().body(response); // 400 Bad Request
+    }
+
     ApiResponse<Object> response = new ApiResponse<Object>(
       200,
-      "User profile",
+      "User created successfully",
       true,
       null
     );
-    return ResponseEntity.ok(response);
+    return ResponseEntity.status(201).body(response); // 201 Created
   }
 
   @PostMapping("/forgot-password")
-  public ResponseEntity<ApiResponse<Object>> forgotPassword() {
+  public ResponseEntity<ApiResponse<Object>> forgotPassword(
+    @Valid @RequestBody Map<String, String> request
+  ) {
+    String email = request.get("email");
+    String password = request.get("password");
+    Map<String, String> result = new HashMap<String, String>();
+    result.put("email", email);
+    result.put("password", password);
     ApiResponse<Object> response = new ApiResponse<Object>(
       200,
       "User profile",
       true,
-      null
+      result
     );
     return ResponseEntity.ok(response);
   }

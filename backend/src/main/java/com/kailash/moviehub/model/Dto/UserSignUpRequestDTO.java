@@ -8,15 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Getter
 @Setter
-public class UserLoginRequestDTO {
+@Getter
+public class UserSignUpRequestDTO {
 
   @Email(message = "Invalid Email address, Please Input valid Email!")
-  @NotEmpty(message = "Email cannot be empty")
-  private String email;
+  public String email;
 
-  @NotEmpty(message = "Password cannot be empty")
+  @NotEmpty
   @Size(min = 6, max = 16, message = "Input password within 6 to 16 Characters")
-  private String password;
+  public String password;
 }

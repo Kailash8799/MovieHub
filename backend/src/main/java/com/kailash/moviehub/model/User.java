@@ -2,15 +2,11 @@ package com.kailash.moviehub.model;
 
 import jakarta.persistence.*;
 import java.util.UUID;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter
-@Setter
 public class User {
 
   @Id
@@ -29,8 +25,9 @@ public class User {
   @Column(name = "mobile_number", length = 15)
   private String mobileNumber;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "role", length = 20)
-  private String role;
+  private UserRole role;
 
   public String getEmail() {
     return email;
@@ -64,11 +61,11 @@ public class User {
     this.mobileNumber = mobileNumber;
   }
 
-  public String getRole() {
+  public UserRole getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public void setRole(UserRole role) {
     this.role = role;
   }
 
