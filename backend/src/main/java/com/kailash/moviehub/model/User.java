@@ -1,79 +1,89 @@
 package com.kailash.moviehub.model;
 
+import com.kailash.moviehub.utils.AuthoritiesConverter;
 import jakarta.persistence.*;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Set;
+
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "users")
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity implements UserDetails {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+    @Column(name = "email", nullable = false, unique = true, length = 50)
+    private String email;
 
-  @Column(name = "email", nullable = false, unique = true, length = 50)
-  private String email;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-  @Column(name = "password", nullable = false)
-  private String password;
+    @Column(name = "name", length = 50)
+    private String name;
 
-  @Column(name = "name", length = 50)
-  private String name;
+    @Column(name = "mobile_number", length = 15)
+    private String mobileNumber;
 
-  @Column(name = "mobile_number", length = 15)
-  private String mobileNumber;
+    @Convert(converter = AuthoritiesConverter.class)
+    private Set<GrantedAuthority> authorities;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "role", length = 20)
-  private UserRole role;
+    @PrePersist
+    protected void onCreate() {
+        ensureDefaultRole();
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    @Override
+    public String getUsername() {
+        return this.name;
+    }
 
-  public String getPassword() {
-    return password;
-  }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-  public String getName() {
-    return name;
-  }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-  public String getMobileNumber() {
-    return mobileNumber;
-  }
+    public void addRole(String role) {
+        this.authorities.add(new SimpleGrantedAuthority(role));
+        ensureDefaultRole();
+    }
 
-  public void setMobileNumber(String mobileNumber) {
-    this.mobileNumber = mobileNumber;
-  }
+    public void removeRole(String role) {
+        this.authorities.remove(new SimpleGrantedAuthority(role));
+        ensureDefaultRole();
+    }
 
-  public UserRole getRole() {
-    return role;
-  }
-
-  public void setRole(UserRole role) {
-    this.role = role;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
+    private void ensureDefaultRole() {
+        if (this.authorities == null) {
+            this.authorities = Set.of(new SimpleGrantedAuthority("ROLE_USER"));
+        } else this.authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+    }
 }

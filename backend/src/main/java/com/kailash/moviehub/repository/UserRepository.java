@@ -1,4 +1,4 @@
-package com.kailash.moviehub.repositories;
+package com.kailash.moviehub.repository;
 
 import com.kailash.moviehub.model.User;
 

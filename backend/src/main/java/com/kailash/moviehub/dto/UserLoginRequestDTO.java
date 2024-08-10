@@ -1,15 +1,13 @@
-package com.kailash.moviehub.model.Dto;
+package com.kailash.moviehub.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
 public class UserLoginRequestDTO {
 
   @Email(message = "Invalid Email address, Please Input valid Email!")

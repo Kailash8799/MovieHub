@@ -1,7 +1,7 @@
 package com.kailash.moviehub.utils;
 
-import com.kailash.moviehub.model.Dto.UserDTO;
-import com.kailash.moviehub.model.Dto.UserSignUpRequestDTO;
+import com.kailash.moviehub.dto.UserDTO;
+import com.kailash.moviehub.dto.UserSignUpRequestDTO;
 import com.kailash.moviehub.model.User;
 
 public class ModelMapper {
@@ -26,7 +26,6 @@ public class ModelMapper {
     userDTO.setEmail(user.getEmail());
     userDTO.setName(user.getName());
     userDTO.setMobileNumber(user.getMobileNumber());
-    userDTO.setRole(user.getRole());
     return userDTO;
   }
 }
