@@ -27,7 +27,7 @@ public class UserController {
   )
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<ApiResponse<String>> getProfile(
-    @PathVariable("userId") UUID userId
+    @PathVariable UUID userId
   ) {
     ApiResponse<String> response = new ApiResponse<String>(
       200,

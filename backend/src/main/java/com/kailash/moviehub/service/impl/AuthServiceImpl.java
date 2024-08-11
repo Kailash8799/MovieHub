@@ -17,52 +17,56 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
 
-    public AuthServiceImpl(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager,
-            JwtUtils jwtUtils
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
-    }
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthenticationManager authenticationManager;
+  private final JwtUtils jwtUtils;
 
-    @Override
-    public String signIn(UserLoginRequestDTO userLoginRequestDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = (User) authentication.getPrincipal();
-        return jwtUtils.generateToken(user);
-    }
+  public AuthServiceImpl(
+    UserRepository userRepository,
+    PasswordEncoder passwordEncoder,
+    AuthenticationManager authenticationManager,
+    JwtUtils jwtUtils
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.authenticationManager = authenticationManager;
+    this.jwtUtils = jwtUtils;
+  }
 
-    @Override
-    @Transactional
-    public void signUp(UserSignUpRequestDTO userLoginRequestDTO) {
-        User user = ModelMapper.signUpDtoToUser(userLoginRequestDTO);
-        user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
-        this.userRepository.save(user);
-    }
+  @Override
+  public String signIn(UserLoginRequestDTO userLoginRequestDTO) {
+    Authentication authentication = authenticationManager.authenticate(
+      new UsernamePasswordAuthenticationToken(
+        userLoginRequestDTO.getEmail(),
+        userLoginRequestDTO.getPassword()
+      )
+    );
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    User user = (User) authentication.getPrincipal();
+    return jwtUtils.generateToken(user);
+  }
 
-    @Override
-    public boolean forgotPassword() {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'forgotPassword'"
-        );
-    }
+  @Override
+  @Transactional
+  public void signUp(UserSignUpRequestDTO userLoginRequestDTO) {
+    User user = ModelMapper.signUpDtoToUser(userLoginRequestDTO);
+    user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
+    userRepository.saveAndFlush(user);
+  }
 
-    @Override
-    public boolean updatePassword() {
-        throw new UnsupportedOperationException(
-                "Unimplemented method 'updatePassword'"
-        );
-    }
+  @Override
+  public boolean forgotPassword() {
+    throw new UnsupportedOperationException(
+      "Unimplemented method 'forgotPassword'"
+    );
+  }
+
+  @Override
+  public boolean updatePassword() {
+    throw new UnsupportedOperationException(
+      "Unimplemented method 'updatePassword'"
+    );
+  }
 }
