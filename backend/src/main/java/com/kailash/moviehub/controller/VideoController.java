@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
 @RequestMapping("/api/v1/video")
@@ -58,7 +58,7 @@ public class VideoController {
   }
 
   @GetMapping(value = "/stream/{filename:.+}")
-  public ResponseEntity<Resource> streamVideo(
+  public ResponseEntity<StreamingResponseBody> streamVideo(
     @PathVariable String filename,
     @RequestHeader(value = HttpHeaders.RANGE, required = false) String range
   ) {
