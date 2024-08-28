@@ -1,5 +1,5 @@
-import { ImageProps } from 'react-native';
-import { SharedValue } from 'react-native-reanimated';
+import {ImageProps} from 'react-native';
+import {SharedValue} from 'react-native-reanimated';
 
 export type Theme = {
   dark: boolean;
@@ -13,7 +13,6 @@ export type Theme = {
   };
 };
 
-
 export type ThemeColor = {
   primary: string;
   secondary: string;
@@ -21,7 +20,6 @@ export type ThemeColor = {
   quantenary: string;
   quinary: string;
 };
-
 
 export type CustomButtonType = {
   title: string;
@@ -40,6 +38,6 @@ export type HomeScreenSliderType = {
   image: ImageProps;
   title: string;
   description: string;
-  x: SharedValue<number>
-  index: SharedValue<number>
+  x: SharedValue<number>;
+  index: SharedValue<number>;
 };

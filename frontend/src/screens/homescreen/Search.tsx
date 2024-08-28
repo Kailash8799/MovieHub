@@ -1,23 +1,30 @@
-import { View, StyleSheet, StatusBar, Dimensions, FlatList, TextInput } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  StatusBar,
+  Dimensions,
+  FlatList,
+  TextInput,
+} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { OnboardingItem } from '../../utils/constant';
+import {OnboardingItem} from '../../utils/constant';
 import MovieCategoryCard from '../../components/cards/MovieCategoryCard';
 import BottomHeight from '../../components/BottomHeight';
 
-const { width } = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
-const Search = ({ navigation }: { navigation: any }) => {
+const Search = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
       <View style={styles.statusbar} />
-      <View style={[styles.header]} >
-        <View style={styles.inputview} >
+      <View style={[styles.header]}>
+        <View style={styles.inputview}>
           <Icon name="search" style={styles.iconstyle} size={20} />
           <TextInput placeholder="Search" style={styles.searchinput} />
         </View>
         <View style={styles.spacewidth} />
-        <View style={styles.filtericon} >
+        <View style={styles.filtericon}>
           <Icon name="filter" size={30} />
         </View>
       </View>
@@ -28,8 +35,15 @@ const Search = ({ navigation }: { navigation: any }) => {
         showsVerticalScrollIndicator={false}
         style={styles.flatliststyle}
         columnWrapperStyle={styles.flatlistcolumnWrapperStyle}
-        renderItem={({ item, index }) => {
-          return <MovieCategoryCard image={item.image} navigation={navigation} index={index} key={index} />;
+        renderItem={({item, index}) => {
+          return (
+            <MovieCategoryCard
+              image={item.image}
+              navigation={navigation}
+              index={index}
+              key={index}
+            />
+          );
         }}
       />
       {/*  */}

@@ -1,21 +1,36 @@
 import React from 'react';
-import { Dimensions, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import HomeScreenSlider from '../../components/cards/HomeScreenSlider';
-import { OnboardingItem } from '../../utils/constant';
-import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useScrollViewOffset, useSharedValue, withTiming } from 'react-native-reanimated';
-import { ViewToken } from 'react-native';
+import {OnboardingItem} from '../../utils/constant';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedRef,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useScrollViewOffset,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import {ViewToken} from 'react-native';
 import 'react-native-gesture-handler';
-import { commonColor } from '../../utils/colors';
+import {commonColor} from '../../utils/colors';
 import Icon from 'react-native-vector-icons/Entypo';
 import MovieCardParent from '../../components/homepagemovie/MovieCardParent';
 
-
-const { width } = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 const IMAGE_HEIGHT = 400;
 // import Icon from 'react-native-vector-icons/AntDesign';
 
 // { navigation }: { navigation: any }
-const Home = ({ navigation }: { navigation: any }) => {
+const Home = ({navigation}: {navigation: any}) => {
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
@@ -28,7 +43,9 @@ const Home = ({ navigation }: { navigation: any }) => {
     },
   });
 
-  const onViewableItemsChanged = ({ viewableItems }: {
+  const onViewableItemsChanged = ({
+    viewableItems,
+  }: {
     viewableItems: ViewToken[];
     changed: ViewToken[];
   }) => {
@@ -36,7 +53,12 @@ const Home = ({ navigation }: { navigation: any }) => {
   };
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(scrollViewOffset.value, [IMAGE_HEIGHT / 2, IMAGE_HEIGHT], [0, 2], Extrapolation.CLAMP);
+    const opacity = interpolate(
+      scrollViewOffset.value,
+      [IMAGE_HEIGHT / 2, IMAGE_HEIGHT],
+      [0, 2],
+      Extrapolation.CLAMP,
+    );
     // const scale = interpolate(scrollViewOffset.value, [-IMAGE_HEIGHT, 0, IMAGE_HEIGHT], [1, 1, 1.5]);
     // console.log(opacity);
     return {
@@ -46,14 +68,23 @@ const Home = ({ navigation }: { navigation: any }) => {
   });
 
   return (
-    <View style={styles.flatlistview} >
+    <View style={styles.flatlistview}>
       <Animated.View style={[styles.headerwithstatusbar, headerAnimatedStyle]}>
         <View style={styles.statusbarheight} />
       </Animated.View>
-      <StatusBar backgroundColor={'rgba(52, 52, 52, 0.0)'} showHideTransition={'fade'} animated={true} translucent />
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} >
-        <View style={styles.container} >
-          <View style={styles.flatlistview} >
+      <StatusBar
+        backgroundColor={'rgba(52, 52, 52, 0.0)'}
+        showHideTransition={'fade'}
+        animated={true}
+        translucent
+      />
+      <Animated.ScrollView
+        ref={scrollRef}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View style={styles.flatlistview}>
             <Animated.FlatList
               nestedScrollEnabled
               // ref={ref}
@@ -63,33 +94,58 @@ const Home = ({ navigation }: { navigation: any }) => {
               onScroll={onScroll}
               onViewableItemsChanged={onViewableItemsChanged}
               showsHorizontalScrollIndicator={false}
-              renderItem={({ index, item }) => {
-                return <HomeScreenSlider
-                  key={index}
-                  x={x}
-                  index={flatListIndex}
-                  image={item.image}
-                  title={item.title}
-                  description={item.description}
-                />;
+              renderItem={({index, item}) => {
+                return (
+                  <HomeScreenSlider
+                    key={index}
+                    x={x}
+                    index={flatListIndex}
+                    image={item.image}
+                    title={item.title}
+                    description={item.description}
+                  />
+                );
               }}
             />
           </View>
-          <View style={styles.bottombox} >
-            <TouchableOpacity activeOpacity={0.6} style={[styles.button, styles.playbutton]} >
+          <View style={styles.bottombox}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={[styles.button, styles.playbutton]}>
               <Icon name="controller-play" color={'#fff'} size={20} />
-              <Text style={styles.text} >Play</Text>
+              <Text style={styles.text}>Play</Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={[styles.button, styles.tolistbutton]} >
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={[styles.button, styles.tolistbutton]}>
               <Icon name="plus" color={commonColor.primaryyellow} size={20} />
-              <Text style={[styles.text, { color: commonColor.primaryyellow }]} > ToList</Text>
+              <Text style={[styles.text, {color: commonColor.primaryyellow}]}>
+                {' '}
+                ToList
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <MovieCardParent navigation={navigation} categoryname={'top10week'} categorytitle={'Top 10 movies this week'} />
-        <MovieCardParent navigation={navigation} categoryname={'newrelease'} categorytitle={'New Releases'} />
-        <MovieCardParent navigation={navigation} categoryname={'top10week'} categorytitle={'Top 10 movies this week'} />
-        <MovieCardParent navigation={navigation} categoryname={'top10week'} categorytitle={'Top 10 movies this week'} />
+        <MovieCardParent
+          navigation={navigation}
+          categoryname={'top10week'}
+          categorytitle={'Top 10 movies this week'}
+        />
+        <MovieCardParent
+          navigation={navigation}
+          categoryname={'newrelease'}
+          categorytitle={'New Releases'}
+        />
+        <MovieCardParent
+          navigation={navigation}
+          categoryname={'top10week'}
+          categorytitle={'Top 10 movies this week'}
+        />
+        <MovieCardParent
+          navigation={navigation}
+          categoryname={'top10week'}
+          categorytitle={'Top 10 movies this week'}
+        />
       </Animated.ScrollView>
     </View>
   );
