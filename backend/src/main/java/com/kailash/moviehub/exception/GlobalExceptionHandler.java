@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     final HttpServletRequest request
   ) {
     ApiResponse<Object> response = new ApiResponse<>(
-      HttpStatus.NOT_FOUND.value(),
+      HttpStatus.TOO_MANY_REQUESTS.value(),
       rateLimitException.getMessage(),
       false,
       request.getRequestURI()

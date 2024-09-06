@@ -1,8 +1,10 @@
 package com.kailash.moviehub.utils;
 
 import com.kailash.moviehub.exception.RateLimitException;
-import java.util.ArrayList;
-import java.util.List;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -17,13 +19,14 @@ public class RateLimitAspect {
 
   public static final String ERROR_MESSAGE =
     "To many request at endpoint %s from IP %s! Please try again after %d milliseconds!";
-  private final ConcurrentHashMap<String, List<Long>> requestCounts = new ConcurrentHashMap<>();
 
   @Value("${spring.app.rate.limit:#{5}}")
   private int rateLimit;
 
   @Value("${spring.app.rate.durationinms:#{60000}}")
   private long rateDuration;
+
+  private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
   /**
    * Executed by each call of a method annotated with {@link WithRateLimitProtection} which should be an HTTP endpoint.
@@ -36,10 +39,9 @@ public class RateLimitAspect {
   public void rateLimit() {
     final ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
     final String key = requestAttributes.getRequest().getRemoteAddr();
-    requestCounts.putIfAbsent(key, new ArrayList<>());
-    final long currentTime = System.currentTimeMillis();
-    cleanUpRequestCounts(currentTime);
-    if (requestCounts.get(key).size() > rateLimit - 1) {
+    Bucket bucket = getBucket(key);
+
+    if (!bucket.tryConsume(1)) {
       throw new RateLimitException(
         String.format(
           ERROR_MESSAGE,
@@ -48,21 +50,20 @@ public class RateLimitAspect {
           rateDuration
         )
       );
-    } else {
-      requestCounts.putIfAbsent(key, new ArrayList<>());
-      requestCounts.get(key).add(currentTime);
     }
   }
 
-  private void cleanUpRequestCounts(final long currentTime) {
-    requestCounts
-      .values()
-      .forEach(l -> {
-        l.removeIf(t -> timeIsTooOld(currentTime, t));
-      });
+  private Bucket getBucket(String key) {
+    return buckets.computeIfAbsent(key, k -> createBucket());
   }
 
-  private boolean timeIsTooOld(final long currentTime, final long timeToCheck) {
-    return currentTime - timeToCheck > rateDuration;
+  private Bucket createBucket() {
+    Bandwidth limit = Bandwidth
+      .builder()
+      .capacity(rateLimit)
+      .refillIntervally(1, Duration.ofMillis(rateDuration))
+      .build();
+    Bucket bucket = Bucket.builder().addLimit(limit).build();
+    return bucket;
   }
 }
