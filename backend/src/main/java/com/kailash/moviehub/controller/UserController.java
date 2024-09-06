@@ -2,6 +2,7 @@ package com.kailash.moviehub.controller;
 
 import com.kailash.moviehub.service.UserService;
 import com.kailash.moviehub.utils.ApiResponse;
+import com.kailash.moviehub.utils.WithRateLimitProtection;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
+  @SuppressWarnings("unused")
   @Autowired
   private UserService userService;
 
@@ -25,7 +27,8 @@ public class UserController {
     value = "/profile/{userId}",
     produces = MediaType.APPLICATION_JSON_VALUE
   )
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('USER')")
+  @WithRateLimitProtection
   public ResponseEntity<ApiResponse<String>> getProfile(
     @PathVariable UUID userId
   ) {
@@ -53,7 +56,7 @@ public class UserController {
   }
 
   @DeleteMapping("/profile/{userId}")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ApiResponse<Object>> deleteProfile(
     @PathVariable("userId") UUID userId
   ) {

@@ -1,14 +1,18 @@
 package com.kailash.moviehub.exception;
 
 import com.kailash.moviehub.utils.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,7 +20,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
+
+  @ExceptionHandler(RateLimitException.class)
+  public ResponseEntity<ApiResponse<Object>> handleRateLimitException(
+    final RateLimitException rateLimitException,
+    final HttpServletRequest request
+  ) {
+    ApiResponse<Object> response = new ApiResponse<>(
+      HttpStatus.NOT_FOUND.value(),
+      rateLimitException.getMessage(),
+      false,
+      request.getRequestURI()
+    );
+    return new ResponseEntity<>(response, HttpStatus.TOO_MANY_REQUESTS);
+  }
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ApiResponse<Object>> handleResourceNotFoundException(
@@ -30,6 +49,20 @@ public class GlobalExceptionHandler {
       null
     );
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<ApiResponse<Object>> handleBadCredentialsException(
+    BadCredentialsException ex,
+    WebRequest request
+  ) {
+    ApiResponse<Object> response = new ApiResponse<>(
+      HttpStatus.UNAUTHORIZED.value(),
+      "Invalid credentials",
+      false,
+      null
+    );
+    return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(BadRequestException.class)

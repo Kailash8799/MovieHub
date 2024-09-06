@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    hostname: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: moviehub
+      POSTGRES_PASSWORD: moviehub
+      POSTGRES_DB: moviehub
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer_container
+    restart: always
+    ports:
+      - "8085:8080"
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
+volumes:
+  pgdata:
+  redis-data:

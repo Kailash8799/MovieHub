@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
   public void signUp(UserSignUpRequestDTO userLoginRequestDTO) {
     User user = ModelMapper.signUpDtoToUser(userLoginRequestDTO);
     user.setPassword(passwordEncoder.encode(userLoginRequestDTO.getPassword()));
-    userRepository.saveAndFlush(user);
+    userRepository.save(user);
   }
 
   @Override
