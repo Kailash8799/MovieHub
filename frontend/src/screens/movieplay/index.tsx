@@ -66,7 +66,7 @@ const PlayMovie = ({route}: {route: any}) => {
   const {movieuri} = route.params;
   const [videoloading, setvideoloading] = useState(false);
   const [seeking, setSeeking] = useState(false);
-  const videoRef = useRef<Video>(null);
+  const videoRef = useRef<typeof Video | null>(null);
 
   useEffect(() => {
     return () => {

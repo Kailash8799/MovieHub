@@ -8,12 +8,15 @@
 import React from 'react';
 import AppNavigator from './src/navigation/AppNavigator';
 import AppProvider from './src/components/providers/AppProvider';
+import ErrorBoundary from './src/components/ErrorBoundary';
 
 function App(): React.JSX.Element {
   return (
-    <AppProvider>
-      <AppNavigator />
-    </AppProvider>
+    <ErrorBoundary>
+      <AppProvider>
+        <AppNavigator />
+      </AppProvider>
+    </ErrorBoundary>
   );
 }
 

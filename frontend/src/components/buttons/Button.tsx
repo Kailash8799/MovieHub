@@ -1,5 +1,5 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {CustomButtonType} from '../../utils/types';
 import {commonColor} from '../../utils/colors';
 
